@@ -1,5 +1,4 @@
 import MaxWidthWrapper from "@/components/max-width-wrapper";
-import Navigation from "@/components/navigation";
 import { buttonVariants } from "@/components/ui/button";
 import Image from "next/image";
 import Link from "next/link";
@@ -7,10 +6,7 @@ import Link from "next/link";
 export default function Home() {
 	return (
 		<>
-			<div>
-				<Navigation />
-			</div>
-			<MaxWidthWrapper className="mb-12 sm:mt-40 mt-28 flex justify-center items-center flex-col text-center">
+			<MaxWidthWrapper className="mb-12 sm:mt-24 mt-20 flex justify-center items-center flex-col text-center">
 				<div className="border mx-auto mb-4 max-w-fit flex justify-center items-center space-x-2 overflow-hidden rounded-full border-gray-200 bg-white px-7 py-2 shadow-sm transition-all hover:border-gray-300 hover:bg-white/50 hover:shadow-md">
 					<p className="text-sm text-gray-700">
 						<span className="font-semibold">Yapster</span> is now public! 😎
@@ -60,6 +56,7 @@ export default function Home() {
 										height={866}
 										quality={100}
 										className="rounded-md bg-white p-2 sm:p-8 md:p-20 shadow-2xl ring-1 ring-gray-900/10"
+										priority={true}
 									/>
 								</div>
 							</div>

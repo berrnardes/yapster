@@ -1,9 +1,11 @@
+import Navigation from "@/components/navigation";
 import { cn } from "@/lib/utils";
+import { ClerkProvider } from "@clerk/nextjs";
 import type { Metadata } from "next";
-import { Poppins } from "next/font/google";
+import { Inter } from "next/font/google";
 import "./globals.css";
 
-const poppins = Poppins({
+const inter = Inter({
 	subsets: ["latin"],
 	weight: ["200", "400", "600", "800"],
 });
@@ -19,15 +21,18 @@ export default function RootLayout({
 	children: React.ReactNode;
 }>) {
 	return (
-		<html lang="en">
-			<body
-				className={cn(
-					"grainy min-h-screen font-sans antialiased",
-					poppins.className
-				)}
-			>
-				{children}
-			</body>
-		</html>
+		<ClerkProvider>
+			<html lang="en">
+				<body
+					className={cn(
+						"grainy min-h-screen font-sans antialiased",
+						inter.className
+					)}
+				>
+					<Navigation />
+					{children}
+				</body>
+			</html>
+		</ClerkProvider>
 	);
 }
