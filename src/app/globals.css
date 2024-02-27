@@ -91,3 +91,7 @@ body,
 .cl-formButtonPrimary {
 	@apply bg-zinc-800;
 }
+
+.cl-internal-wkkub3 {
+	visibility: hidden;
+}
