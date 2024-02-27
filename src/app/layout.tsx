@@ -2,10 +2,10 @@ import Navigation from "@/components/navigation";
 import { cn } from "@/lib/utils";
 import { ClerkProvider } from "@clerk/nextjs";
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Noto_Sans_Display } from "next/font/google";
 import "./globals.css";
 
-const inter = Inter({
+const noto = Noto_Sans_Display({
 	subsets: ["latin"],
 	weight: ["200", "400", "600", "800"],
 });
@@ -26,7 +26,7 @@ export default function RootLayout({
 				<body
 					className={cn(
 						"grainy min-h-screen font-sans antialiased",
-						inter.className
+						noto.className
 					)}
 				>
 					<Navigation />

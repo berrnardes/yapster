@@ -7,7 +7,7 @@ export default function Home() {
 	return (
 		<>
 			<MaxWidthWrapper className="mb-12 sm:mt-24 mt-20 flex justify-center items-center flex-col text-center">
-				<div className="border mx-auto mb-4 max-w-fit flex justify-center items-center space-x-2 overflow-hidden rounded-full border-gray-200 bg-white px-7 py-2 shadow-sm transition-all hover:border-gray-300 hover:bg-white/50 hover:shadow-md">
+				<div className="border mx-auto mb-4 max-w-fit flex justify-center items-center space-x-2 overflow-hidden rounded-full border-gray-200 bg-white px-7 py-3 shadow-sm transition-all hover:border-gray-300 hover:bg-white/50 hover:shadow-md">
 					<p className="text-sm text-gray-700">
 						<span className="font-semibold">Yapster</span> is now public! 😎
 					</p>
