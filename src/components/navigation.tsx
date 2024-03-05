@@ -16,6 +16,7 @@ const Navigation = () => {
 					<h1 className="text-xl font-semibold text-zinc-700">
 						<Link href="/">
 							<Image
+								priority={true}
 								src="/yapster-logo.svg"
 								alt="Yapster"
 								width={130}
@@ -54,7 +55,7 @@ const Navigation = () => {
 									Dashboard
 								</Link>
 								<div>
-									<UserButton />
+									<UserButton afterSignOutUrl="/" />
 								</div>
 							</>
 						)}

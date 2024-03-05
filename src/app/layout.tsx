@@ -1,4 +1,5 @@
 import Navigation from "@/components/navigation";
+import Providers from "@/components/providers";
 import { cn } from "@/lib/utils";
 import { ClerkProvider } from "@clerk/nextjs";
 import type { Metadata } from "next";
@@ -21,18 +22,20 @@ export default function RootLayout({
 	children: React.ReactNode;
 }>) {
 	return (
-		<ClerkProvider>
-			<html lang="en">
-				<body
-					className={cn(
-						"grainy min-h-screen font-sans antialiased",
-						noto.className
-					)}
-				>
-					<Navigation />
-					{children}
-				</body>
-			</html>
-		</ClerkProvider>
+		<Providers>
+			<ClerkProvider>
+				<html lang="en">
+					<body
+						className={cn(
+							"grainy min-h-screen font-sans antialiased",
+							noto.className
+						)}
+					>
+						<Navigation />
+						{children}
+					</body>
+				</html>
+			</ClerkProvider>
+		</Providers>
 	);
 }
