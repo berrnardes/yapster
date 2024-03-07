@@ -1,26 +1,50 @@
-import { createUploadthing, type FileRouter } from "uploadthing/next";
-import { UploadThingError } from "uploadthing/server";
+import { db } from "@/db";
+import { currentUser } from "@clerk/nextjs";
+import { FileRouter, createUploadthing } from "uploadthing/next";
+
+type onCompleteUploadProps = {
+	metadata: Awaited<ReturnType<typeof middleware>>;
+	file: {
+		key: string;
+		name: string;
+		url: string;
+	};
+};
 
 const f = createUploadthing();
 
-const auth = (req: Request) => ({ id: "fakeId" });
+const middleware = async () => {
+	const user = await currentUser();
+
+	if (!user || !user.id) throw new Error("UNAUTHORIZED");
+
+	return { userId: user.id };
+};
+
+const onCompleteUpload = async ({ metadata, file }: onCompleteUploadProps) => {
+	const isFileExists = await db.file.findFirst({
+		where: {
+			key: file.key,
+		},
+	});
+
+	if (isFileExists) return;
+
+	await db.file.create({
+		data: {
+			key: file.key,
+			name: file.name,
+			userId: metadata.userId,
+			url: `https://uploadthing-prod.s3.us-west-2.amazonaws.com/${file.key}`,
+			uploadStatus: "PROCESSING",
+		},
+	});
+};
 
 export const ourFileRouter = {
-	imageUploader: f({ image: { maxFileSize: "4MB" } })
-		.middleware(async ({ req }) => {
-			const user = await auth(req);
-
-			if (!user) throw new UploadThingError("Unauthorized");
-
-			return { userId: user.id };
-		})
-		.onUploadComplete(async ({ metadata, file }) => {
-			console.log("Upload complete for userId:", metadata.userId);
-
-			console.log("file url", file.url);
-
-			return { uploadedBy: metadata.userId };
-		}),
+	freePlanUploader: f({ pdf: { maxFileSize: "4MB" } })
+		.middleware(middleware)
+		.onUploadComplete(onCompleteUpload),
 } satisfies FileRouter;
 
 export type OurFileRouter = typeof ourFileRouter;

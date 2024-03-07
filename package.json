@@ -14,7 +14,9 @@
     "@kinde-oss/kinde-auth-nextjs": "^2.1.15",
     "@prisma/client": "^5.10.2",
     "@radix-ui/react-dialog": "^1.0.5",
+    "@radix-ui/react-progress": "^1.0.3",
     "@radix-ui/react-slot": "^1.0.2",
+    "@radix-ui/react-toast": "^1.1.5",
     "@tailwindcss/typography": "^0.5.10",
     "@tanstack/react-query": "latest",
     "@trpc/client": "next",
@@ -24,6 +26,7 @@
     "@tsparticles/engine": "^3.2.2",
     "@tsparticles/react": "^3.0.0",
     "@tsparticles/slim": "^3.2.2",
+    "@uploadthing/react": "^6.3.2",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.0",
     "framer-motion": "^11.0.6",
@@ -32,7 +35,9 @@
     "react": "^18",
     "react-dom": "^18",
     "tailwind-merge": "^2.2.1",
-    "tailwindcss-animate": "^1.0.7"
+    "tailwindcss-animate": "^1.0.7",
+    "uploadthing": "^6.5.0",
+    "zod": "^3.22.4"
   },
   "devDependencies": {
     "@types/node": "^20",
@@ -43,6 +48,7 @@
     "eslint-config-next": "14.1.0",
     "postcss": "^8",
     "prisma": "^5.10.2",
+    "react-dropzone": "^14.2.3",
     "tailwindcss": "^3.3.0",
     "typescript": "^5"
   }

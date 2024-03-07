@@ -1,7 +1,8 @@
 import { db } from "@/db";
 import { currentUser } from "@clerk/nextjs";
 import { TRPCError } from "@trpc/server";
-import { publicProcedures, router } from "./trpc";
+import { z } from "zod";
+import { privateProcedures, publicProcedures, router } from "./trpc";
 
 export const appRouter = router({
 	authCallback: publicProcedures.query(async () => {
@@ -27,6 +28,22 @@ export const appRouter = router({
 		}
 		return { success: true };
 	}),
+	getFile: privateProcedures
+		.input(z.object({ key: z.string() }))
+		.mutation(async ({ ctx, input }) => {
+			const { userId } = ctx;
+
+			const file = await db.file.findFirst({
+				where: {
+					key: input.key,
+					userId,
+				},
+			});
+
+			if (!file) throw new TRPCError({ code: "NOT_FOUND" });
+
+			return file;
+		}),
 });
 
 export type AppRouter = typeof appRouter;
