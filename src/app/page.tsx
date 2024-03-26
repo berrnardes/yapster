@@ -1,7 +1,14 @@
 import MaxWidthWrapper from "@/components/max-width-wrapper";
 import { buttonVariants } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
+import localFont from "next/font/local";
 import Image from "next/image";
 import Link from "next/link";
+
+const maisonNeue = localFont({
+	src: "../../public/font/MaisonNeueDemi.otf",
+	display: "swap",
+});
 
 export default function Home() {
 	return (
@@ -9,10 +16,15 @@ export default function Home() {
 			<MaxWidthWrapper className="mb-12 sm:mt-24 mt-20 flex justify-center items-center flex-col text-center">
 				<div className="border mx-auto mb-4 max-w-fit flex justify-center items-center space-x-2 overflow-hidden rounded-full border-gray-200 bg-white px-7 py-3 shadow-sm transition-all hover:border-gray-300 hover:bg-white/50 hover:shadow-md">
 					<p className="text-sm text-gray-700">
-						<span className="font-semibold">Yapster</span> is now public! 😎
+						<span className="font-semibold">Yapster</span> is now public! 👽
 					</p>
 				</div>
-				<h1 className="text-zinc-800 max-w-sm sm:mt-5 text-4xl font-bold sm:text-6xl lg:text-7xl sm:max-w-4xl">
+				<h1
+					className={cn(
+						"text-zinc-800 max-w-sm sm:mt-5 text-4xl font-bold sm:text-6xl lg:text-7xl sm:max-w-4xl uppercase",
+						maisonNeue.className
+					)}
+				>
 					Chat With Your{" "}
 					<span className="bg-gradient-to-r from-blue-500 to-blue-700 text-transparent bg-clip-text">
 						Documents
@@ -40,9 +52,9 @@ export default function Home() {
 						<div
 							style={{
 								clipPath:
-									"polygon(74.1% 44.1%, 100% 61.6%, 97.5% 26.9%, 85.5% 0.1%, 80.7% 2%, 72.5% 32.5%, 60.2% 62.4%, 52.4% 68.1%, 47.5% 58.3%, 45.2% 34.5%, 27.5% 76.7%, 0.1% 64.9%, 17.9% 100%, 27.6% 76.8%, 76.1% 97.7%, 74.1% 44.1%)",
+									"polygon(80.1% 44.1%, 100% 70.6%, 97.5% 26.9%, 85.5% 0.1%, 80.7% 2%, 72.5% 32.5%, 60.2% 62.4%, 52.4% 68.1%, 47.5% 58.3%, 45.2% 34.5%, 27.5% 76.7%, 0.1% 64.9%, 17.9% 100%, 27.6% 76.8%, 76.1% 97.7%, 74.1% 44.1%)",
 							}}
-							className="relative left-[calc(50%-11rem)] aspect-[1155/678] w-[36.125rem] -translate-x-1/2 rotate-[30deg] bg-gradient-to-tr from-[#ff80b5] to-[#9089fc] opacity-30 sm:left-[calc(50%-30rem)] sm:w-[72.1875rem]"
+							className="relative left-[calc(50%-11rem)] aspect-[1155/678] w-[66.125rem] -translate-x-1/2 rotate-[30deg] bg-gradient-to-tr from-blue-500 to-violet-700 opacity-30 sm:left-[calc(50%-30rem)] sm:w-[72.1875rem]"
 						/>
 					</div>
 					<div>
@@ -71,7 +83,7 @@ export default function Home() {
 								clipPath:
 									"polygon(74.1% 44.1%, 100% 61.6%, 97.5% 26.9%, 85.5% 0.1%, 80.7% 2%, 72.5% 32.5%, 60.2% 62.4%, 52.4% 68.1%, 47.5% 58.3%, 45.2% 34.5%, 27.5% 76.7%, 0.1% 64.9%, 17.9% 100%, 27.6% 76.8%, 76.1% 97.7%, 74.1% 44.1%)",
 							}}
-							className="relative left-[calc(50%-13rem)] aspect-[1155/678] w-[36.125rem] -translate-x-1/2 rotate-[30deg] bg-gradient-to-tr from-[#ff80b5] to-[#9089fc] opacity-30 sm:left-[calc(50%-36rem)] sm:w-[72.1875rem]"
+							className="relative left-[calc(50%-13rem)] aspect-[1155/678] w-[46.125rem] -translate-x-1/2 rotate-[30deg] bg-gradient-to-tr from-[#ff80b5] to-[#9089fc] opacity-30 sm:left-[calc(50%-36rem)] sm:w-[72.1875rem]"
 						/>
 					</div>
 				</div>

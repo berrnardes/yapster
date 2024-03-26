@@ -1,0 +1,125 @@
+import { db } from "@/db";
+import { openai } from "@/lib/openai";
+import { pineconeClient } from "@/lib/pinecone";
+import { sendMessageValidator } from "@/lib/validators/send-message-validator";
+import { currentUser } from "@clerk/nextjs";
+import { OpenAIEmbeddings } from "@langchain/openai";
+import { PineconeStore } from "@langchain/pinecone";
+import { NextRequest } from "next/server";
+
+import { OpenAIStream, StreamingTextResponse } from "ai";
+
+export const POST = async (req: NextRequest) => {
+	const body = req.json();
+
+	// Check if the request was maded by a signed user
+	const user = await currentUser();
+	if (!user?.id) {
+		return new Response("Unauthorized", { status: 401 });
+	}
+
+	// Infer the values that comes from my body request
+	const { fileId, message } = sendMessageValidator.parse(body);
+
+	// Find the file from corresponding user, in the database via prisma
+	const file = await db.file.findFirst({
+		where: {
+			id: fileId,
+			userId: user.id,
+		},
+	});
+
+	if (!file) {
+		return new Response("Not Found", { status: 404 });
+	}
+
+	await db.message.create({
+		data: {
+			text: message,
+			isUserMessage: true,
+			userId: user.id,
+			fileId: file.id,
+		},
+	});
+
+	// Vectorize message
+	const embeddings = new OpenAIEmbeddings({
+		openAIApiKey: process.env.OPENAI_API_KEY,
+	});
+
+	// Call pinecone and index
+	const pinecone = await pineconeClient();
+	const pineconeIndex = pinecone.Index("yapster");
+
+	const vectorStore = await PineconeStore.fromExistingIndex(embeddings, {
+		pineconeIndex,
+		namespace: file.id,
+	});
+
+	// Get the results by similarity with message param
+	const results = await vectorStore.similaritySearch(message, 4);
+
+	// Search for messages related to the current file
+	const prevMessages = await db.message.findMany({
+		where: {
+			fileId,
+		},
+		orderBy: {
+			createdAt: "asc",
+		},
+		take: 6,
+	});
+
+	// Format the values came from database to show in ui
+	const formattedPrevMessage = prevMessages.map((msg) => ({
+		role: msg.isUserMessage ? ("user" as const) : ("assistant" as const),
+		content: msg.text,
+	}));
+
+	const response = await openai.chat.completions.create({
+		model: "gpt-3.5-turbo",
+		temperature: 0,
+		stream: true,
+		messages: [
+			{
+				// Instructions for the model to know to behave
+				role: "system",
+				content:
+					"Use os seguintes trechos de contexto (ou conversa anterior, se necessário) para responder à pergunta do usuário em formato markdown.",
+			},
+			{
+				role: "user",
+				content: `Use os seguintes trechos de contexto (ou conversa anterior, se necessário) para responder à pergunta do usuário em formato markdown. \nSe você não souber a resposta, apenas fale que você não sabe, não tente responder.
+                \n----------------\n
+                CONVERSAS ANTERIOR:
+                ${formattedPrevMessage.map((message) => {
+									if (message.role === "user")
+										return `Usuário: ${message.content}`;
+								})}
+                
+                \n----------------\n
+
+                CONTEXTO:
+                ${results.map((r) => r.pageContent).join("\n\n")}
+
+                ENTRADA DO USUÁRIO: ${message}
+                `,
+			},
+		],
+	});
+
+	const stream = OpenAIStream(response, {
+		async onCompletion(completion) {
+			await db.message.create({
+				data: {
+					text: completion,
+					isUserMessage: false,
+					fileId,
+					userId: user.id,
+				},
+			});
+		},
+	});
+
+	return new StreamingTextResponse(stream);
+};

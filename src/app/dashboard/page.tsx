@@ -5,7 +5,6 @@ import { redirect } from "next/navigation";
 
 const Page = async () => {
 	const user = await currentUser();
-	console.log("Checking user");
 	if (!user || !user.id) redirect("/auth-callback?origin=dashboard");
 
 	const dbUser = await db.user.findUnique({

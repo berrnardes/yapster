@@ -43,7 +43,7 @@ const Dashboard = () => {
 									href={`/dashboard/${file.id}`}
 								>
 									<div className="pt-6 px-6 flex w-full  rounded-lg items-center justify-between space-x-6">
-										<div className="h-10 w-10 flex flex-shrink-0 rounded-full bg-gradient-to-r from-cyan-500 to-blue-500 items-center justify-center">
+										<div className="h-10 w-10 flex flex-shrink-0 rounded-full bg-zinc-600 items-center justify-center">
 											<p className="text-white text-3xl -mt-1">
 												{file.name.charAt(0).toUpperCase()}
 											</p>

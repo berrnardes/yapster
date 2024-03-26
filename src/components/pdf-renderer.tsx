@@ -13,6 +13,8 @@ import {
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Document, Page, pdfjs } from "react-pdf";
+import "react-pdf/dist/Page/AnnotationLayer.css";
+import "react-pdf/dist/Page/TextLayer.css";
 import { useResizeDetector } from "react-resize-detector";
 import SimpleBar from "simplebar-react";
 import { z } from "zod";
@@ -66,10 +68,9 @@ const PdfRenderer = ({ url }: PdfRendererProps) => {
 		resolver: zodResolver(CustomPageValidator),
 	});
 
-	console.log(errors);
-
 	const handlePageSubmit = ({ page }: TCustomPageValidator) => {
-		console.log("kkk");
+		setCurrPage(Number(page));
+		setValue("page", String(page));
 	};
 
 	return (

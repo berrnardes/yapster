@@ -30,7 +30,7 @@ export default function RootLayout({
 				<html lang="en">
 					<body
 						className={cn(
-							"grainy min-h-screen font-sans antialiased",
+							"bg-zinc-100 min-h-screen font-sans antialiased",
 							noto.className
 						)}
 					>

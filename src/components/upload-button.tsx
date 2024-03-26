@@ -1,15 +1,32 @@
 "use client";
 
+import { trpc } from "@/app/_trpc/client";
+import { useUploadThing } from "@/lib/uploadthing";
 import { Cloud, File, Upload } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import Dropzone from "react-dropzone";
 import { Button } from "./ui/button";
 import { Dialog, DialogContent, DialogTrigger } from "./ui/dialog";
 import { Progress } from "./ui/progress";
+import { useToast } from "./ui/use-toast";
 
 const UploadDropzone = () => {
 	const [isUploading, setIsUploading] = useState<boolean>(false);
 	const [uploadProgress, setUploadProgress] = useState<number>(0);
+	const router = useRouter();
+
+	const { toast } = useToast();
+
+	const { startUpload } = useUploadThing("freePlanUploader");
+
+	const { mutate: startPolling } = trpc.getFile.useMutation({
+		onSuccess: (file) => {
+			router.push(`/dashboard/${file.id}`);
+		},
+		retry: true,
+		retryDelay: 500,
+	});
 
 	const startSimulatedProgress = () => {
 		setUploadProgress(0);
@@ -22,17 +39,43 @@ const UploadDropzone = () => {
 				}
 				return prevProgress + 5;
 			});
-		}, 500);
+		}, 1000);
 
 		return interval;
 	};
 	return (
 		<Dropzone
 			multiple={false}
-			onDrop={async (acceptedFiles) => {
+			onDrop={async (acceptedFile) => {
 				setIsUploading(true);
 
 				const progressInterval = startSimulatedProgress();
+
+				const res = await startUpload(acceptedFile);
+
+				if (!res) {
+					return toast({
+						title: "Alguma coisa deu errado!!!",
+						description: "Por favor tente de novo",
+						variant: "destructive",
+					});
+				}
+
+				const [fileResponse] = res;
+
+				const key = fileResponse?.key;
+
+				if (!key) {
+					return toast({
+						title: "Alguma coisa deu errado!!!",
+						description: "Por favor tente de novo",
+						variant: "destructive",
+					});
+				}
+
+				clearInterval(progressInterval);
+				setUploadProgress(100);
+				startPolling({ key });
 			}}
 		>
 			{({ getRootProps, getInputProps, acceptedFiles }) => (
