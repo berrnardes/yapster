@@ -1,35 +1,47 @@
+import Footer from "@/components/footer";
 import MaxWidthWrapper from "@/components/max-width-wrapper";
 import { buttonVariants } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
-import localFont from "next/font/local";
+import { TypewriterEffect } from "@/components/ui/typewriter-effect";
 import Image from "next/image";
 import Link from "next/link";
 
-const maisonNeue = localFont({
-	src: "../../public/font/MaisonNeueDemi.otf",
-	display: "swap",
-});
-
 export default function Home() {
+	const words = [
+		{
+			text: "INTERAJA",
+			className: "text-zinc-800",
+		},
+		{
+			text: "COM",
+			className: "text-zinc-800",
+		},
+		{
+			text: "SEUS",
+			className: "text-zinc-800",
+		},
+		{
+			text: "DOCUMENTOS",
+			className: "text-sky-600",
+		},
+	];
 	return (
 		<>
 			<MaxWidthWrapper className="mb-12 sm:mt-24 mt-20 flex justify-center items-center flex-col text-center">
 				<div className="border mx-auto mb-4 max-w-fit flex justify-center items-center space-x-2 overflow-hidden rounded-full border-gray-200 bg-white px-7 py-3 shadow-sm transition-all hover:border-gray-300 hover:bg-white/50 hover:shadow-md">
 					<p className="text-sm text-gray-700">
-						<span className="font-semibold">Yapster</span> is now public! 👽
+						<span className="font-semibold">Yapster</span> agora tá online! 😎
 					</p>
 				</div>
-				<h1
-					className={cn(
-						"text-zinc-800 max-w-sm sm:mt-5 text-4xl font-bold sm:text-6xl lg:text-7xl sm:max-w-4xl uppercase",
-						maisonNeue.className
-					)}
-				>
+				<TypewriterEffect
+					className=" max-w-sm sm:mt-5 text-4xl font-bold sm:text-6xl lg:text-7xl sm:max-w-4xl"
+					words={words}
+				/>
+				{/* <h1 className="text-zinc-800 max-w-sm sm:mt-5 text-4xl font-bold sm:text-6xl lg:text-7xl sm:max-w-4xl uppercase">
 					Chat With Your{" "}
-					<span className="bg-gradient-to-r from-blue-500 to-blue-700 text-transparent bg-clip-text">
+					<span className="bg-gradient-to-r from-sky-400 to-sky-700 text-transparent bg-clip-text">
 						Documents
 					</span>
-				</h1>
+				</h1> */}
 				<p className="mt-5 max-w-prose sm:text-lg text-zinc-600">
 					<span className="font-semibold">Tired of information overload?</span>{" "}
 					Yapster is your one-stop solution for conquering complex topics and
@@ -163,6 +175,7 @@ export default function Home() {
 					</div>
 				</div>
 			</MaxWidthWrapper>
+			<Footer />
 		</>
 	);
 }

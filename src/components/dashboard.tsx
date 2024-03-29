@@ -6,6 +6,7 @@ import { MessageSquare, Plus, Trash } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import Skeleton from "react-loading-skeleton";
+import { Icons } from "./icons";
 import MaxWidthWrapper from "./max-width-wrapper";
 import { Button } from "./ui/button";
 import UploadButton from "./upload/upload-button";
@@ -14,8 +15,6 @@ const Dashboard = () => {
 	const utils = trpc.useUtils();
 
 	const { data: files, isLoading } = trpc.getUserFiles.useQuery();
-
-	console.log(files);
 
 	return (
 		<MaxWidthWrapper className="md:pt-10 pt-5">
@@ -44,9 +43,10 @@ const Dashboard = () => {
 								>
 									<div className="pt-6 px-6 flex w-full  rounded-lg items-center justify-between space-x-6">
 										<div className="h-10 w-10 flex flex-shrink-0 rounded-full bg-zinc-600 items-center justify-center">
-											<p className="text-white text-3xl -mt-1">
+											{/* <p className="text-white text-3xl -mt-1">
 												{file.name.charAt(0).toUpperCase()}
-											</p>
+											</p> */}
+											<Icons.boringavatar />
 										</div>
 										<div className="flex-1 truncate">
 											<div className="flex items-center space-x-3">

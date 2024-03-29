@@ -178,7 +178,7 @@ export const ChatContextProvider = ({ children, fileId }: Props) => {
 			);
 		},
 		onSettled: async () => {
-			setIsLoading(true);
+			setIsLoading(false);
 			await utils.getFileMessages.invalidate({ fileId });
 		},
 	});

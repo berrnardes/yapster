@@ -1,16 +1,28 @@
 import { db } from "@/db";
 import { openai } from "@/lib/openai";
-import { pineconeClient } from "@/lib/pinecone";
 import { sendMessageValidator } from "@/lib/validators/send-message-validator";
 import { currentUser } from "@clerk/nextjs";
+import { SupabaseVectorStore } from "@langchain/community/vectorstores/supabase";
 import { OpenAIEmbeddings } from "@langchain/openai";
-import { PineconeStore } from "@langchain/pinecone";
 import { NextRequest } from "next/server";
 
+import { client } from "@/lib/supabase";
 import { OpenAIStream, StreamingTextResponse } from "ai";
 
+type Tmsg = {
+	id: string;
+	text: string;
+	isUserMessage: boolean;
+	createdAt: Date;
+	updatadAt: Date;
+	userId: string;
+	fileId: string | null;
+};
+
 export const POST = async (req: NextRequest) => {
-	const body = req.json();
+	const body = await req.json();
+
+	console.log(body);
 
 	// Check if the request was maded by a signed user
 	const user = await currentUser();
@@ -47,16 +59,13 @@ export const POST = async (req: NextRequest) => {
 		openAIApiKey: process.env.OPENAI_API_KEY,
 	});
 
-	// Call pinecone and index
-	const pinecone = await pineconeClient();
-	const pineconeIndex = pinecone.Index("yapster");
-
-	const vectorStore = await PineconeStore.fromExistingIndex(embeddings, {
-		pineconeIndex,
-		namespace: file.id,
+	const supabaseClient = client;
+	const vectorStore = await SupabaseVectorStore.fromExistingIndex(embeddings, {
+		client: supabaseClient,
+		tableName: "documents",
+		queryName: "match_documents",
 	});
 
-	// Get the results by similarity with message param
 	const results = await vectorStore.similaritySearch(message, 4);
 
 	// Search for messages related to the current file
@@ -71,7 +80,7 @@ export const POST = async (req: NextRequest) => {
 	});
 
 	// Format the values came from database to show in ui
-	const formattedPrevMessage = prevMessages.map((msg) => ({
+	const formattedPrevMessage = prevMessages.map((msg: Tmsg) => ({
 		role: msg.isUserMessage ? ("user" as const) : ("assistant" as const),
 		content: msg.text,
 	}));

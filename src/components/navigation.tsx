@@ -9,6 +9,7 @@ import { buttonVariants } from "./ui/button";
 
 const Navigation = () => {
 	const { userId } = auth();
+
 	return (
 		<div className="min-h-14 sticky inset-x-2 w-full bg-white/75 border-zinc-200 backdrop-blur-lg transition-all border-b top-0 z-30">
 			<MaxWidthWrapper>
@@ -30,7 +31,7 @@ const Navigation = () => {
 						{!userId ? (
 							<>
 								<Link
-									href="/"
+									href="/pricing"
 									className={buttonVariants({ size: "sm", variant: "ghost" })}
 								>
 									Pricing
@@ -50,7 +51,7 @@ const Navigation = () => {
 							<>
 								<Link
 									href="/dashboard"
-									className={buttonVariants({ size: "sm" })}
+									className={buttonVariants({ size: "sm", variant: "ghost" })}
 								>
 									Dashboard
 								</Link>

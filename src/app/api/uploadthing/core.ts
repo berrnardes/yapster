@@ -1,8 +1,8 @@
 import { db } from "@/db";
+import { client } from "@/lib/supabase";
 import { currentUser } from "@clerk/nextjs";
 import { SupabaseVectorStore } from "@langchain/community/vectorstores/supabase";
 import { OpenAIEmbeddings } from "@langchain/openai";
-import { createClient } from "@supabase/supabase-js";
 import { PDFLoader } from "langchain/document_loaders/fs/pdf";
 import { FileRouter, createUploadthing } from "uploadthing/next";
 
@@ -54,7 +54,6 @@ const onCompleteUpload = async ({
 			uploadStatus: "PROCESSING",
 		},
 	});
-	console.log("PREPARING THE FILE");
 
 	// PREPARE THE FILE TO READED FOR LLM
 	try {
@@ -66,18 +65,17 @@ const onCompleteUpload = async ({
 
 		const embeddings = new OpenAIEmbeddings();
 
-		// Supabase setup
-		const supabaseUrl = process.env.SUPABASE_URL!;
-		const supabaseKey = process.env.SUPABASE_API_KEY!;
-		const client = createClient(supabaseUrl, supabaseKey);
+		const supabaseClient = client;
 
 		const vectorStore = await SupabaseVectorStore.fromDocuments(
 			document,
 			embeddings,
-			{ client, tableName: "documents", queryName: "match_documents" }
+			{
+				client: supabaseClient,
+				tableName: "documents",
+				queryName: "match_documents",
+			}
 		);
-
-		console.log("Document created");
 
 		await db.file.update({
 			data: {
@@ -87,8 +85,6 @@ const onCompleteUpload = async ({
 				id: createdFile.id,
 			},
 		});
-
-		console.log("Updated in DB");
 	} catch (e) {
 		console.log("Error:", e);
 		await db.file.update({

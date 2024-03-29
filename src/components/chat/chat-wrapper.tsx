@@ -19,12 +19,12 @@ const ChatWrapper = ({ fileId }: ChatWrapperProps) => {
 		},
 		{
 			refetchInterval: (data) =>
-				// @ts-expect-error
-				// Maybe
-				data?.status === "SUCCESS" || data?.status === "FAILED" ? false : 500,
+				data.state.data?.status === "SUCCESS" ||
+				data.state.data?.status === "FAILED"
+					? false
+					: 500,
 		}
 	);
-
 	if (isLoading)
 		return (
 			<div className="relative min-h-full bg-zinc-50 flex divide-y divide-zinc-200 flex-col justify-between gap-2">
@@ -73,7 +73,7 @@ const ChatWrapper = ({ fileId }: ChatWrapperProps) => {
 				<div className="flex-1 justify-between flex flex-col mb-28">
 					<Messages fileId={fileId} />
 				</div>
-				<ChatInput />
+				<ChatInput isDisabled={isLoading} />
 			</div>
 		</ChatContextProvider>
 	);
