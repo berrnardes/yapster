@@ -3,6 +3,7 @@ import Providers from "@/components/providers";
 import { Toaster } from "@/components/ui/toaster";
 import { cn } from "@/lib/utils";
 import { ClerkProvider } from "@clerk/nextjs";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import type { Metadata } from "next";
 import { Noto_Sans_Display } from "next/font/google";
 import "react-loading-skeleton/dist/skeleton.css";
@@ -27,6 +28,7 @@ export default function RootLayout({
 	return (
 		<Providers>
 			<ClerkProvider>
+				<SpeedInsights />
 				<html lang="en">
 					<body
 						className={cn(

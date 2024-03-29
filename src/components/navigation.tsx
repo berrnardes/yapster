@@ -1,5 +1,6 @@
 import { SignInButton, SignUpButton, UserButton, auth } from "@clerk/nextjs";
 
+import { getUserSubscriptionPlan } from "@/lib/stripe";
 import { ArrowRight } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -7,8 +8,9 @@ import MaxWidthWrapper from "./max-width-wrapper";
 import MobileNav from "./mobile-nav";
 import { buttonVariants } from "./ui/button";
 
-const Navigation = () => {
+const Navigation = async () => {
 	const { userId } = auth();
+	const subscriptionPlan = await getUserSubscriptionPlan();
 
 	return (
 		<div className="min-h-14 sticky inset-x-2 w-full bg-white/75 border-zinc-200 backdrop-blur-lg transition-all border-b top-0 z-30">
@@ -49,6 +51,21 @@ const Navigation = () => {
 							</>
 						) : (
 							<>
+								{subscriptionPlan.isSubscribed ? (
+									<Link
+										href="/dashboard/billing"
+										className={buttonVariants({ size: "sm", variant: "ghost" })}
+									>
+										Pricing
+									</Link>
+								) : (
+									<Link
+										href="/pricing"
+										className={buttonVariants({ size: "sm", variant: "ghost" })}
+									>
+										Upgrade 💎
+									</Link>
+								)}
 								<Link
 									href="/dashboard"
 									className={buttonVariants({ size: "sm", variant: "ghost" })}
