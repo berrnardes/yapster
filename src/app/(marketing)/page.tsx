@@ -1,47 +1,26 @@
 import Footer from "@/components/footer";
+import { Icons } from "@/components/icons";
 import MaxWidthWrapper from "@/components/max-width-wrapper";
 import { buttonVariants } from "@/components/ui/button";
-import { TypewriterEffect } from "@/components/ui/typewriter-effect";
 import Image from "next/image";
 import Link from "next/link";
+import ForWho from "./components/for-who";
+import WhatIs from "./components/what-is";
 
 export default function Home() {
-	const words = [
-		{
-			text: "INTERAJA",
-			className: "text-zinc-800",
-		},
-		{
-			text: "COM",
-			className: "text-zinc-800",
-		},
-		{
-			text: "SEUS",
-			className: "text-zinc-800",
-		},
-		{
-			text: "DOCUMENTOS",
-			className: "text-sky-600",
-		},
-	];
 	return (
 		<>
-			<MaxWidthWrapper className="mb-12 sm:mt-24 mt-20 flex justify-center items-center flex-col text-center">
-				<div className="border mx-auto mb-4 max-w-fit flex justify-center items-center space-x-2 overflow-hidden rounded-full border-gray-200 bg-white px-7 py-3 shadow-sm transition-all hover:border-gray-300 hover:bg-white/50 hover:shadow-md">
+			<MaxWidthWrapper className="mb-12 sm:mt-20 mt-16 flex justify-center items-center flex-col text-center">
+				<div className="border mx-auto mb-4 max-w-fit flex justify-center items-center space-x-2 overflow-hidden rounded-full border-gray-300 bg-white px-7 py-3 shadow-sm transition-all hover:border-gray-300 hover:bg-white/50 hover:shadow-md">
 					<p className="text-sm text-gray-700">
 						<span className="font-semibold">Yapster</span> agora tá online! 😎
 					</p>
 				</div>
-				<TypewriterEffect
-					className=" max-w-sm sm:mt-5 text-4xl font-bold sm:text-6xl lg:text-7xl sm:max-w-4xl"
-					words={words}
-				/>
-				{/* <h1 className="text-zinc-800 max-w-sm sm:mt-5 text-4xl font-bold sm:text-6xl lg:text-7xl sm:max-w-4xl uppercase">
-					Chat With Your{" "}
-					<span className="bg-gradient-to-r from-sky-400 to-sky-700 text-transparent bg-clip-text">
-						Documents
-					</span>
-				</h1> */}
+
+				<h1 className="text-zinc-800 max-w-sm sm:mt-5 text-5xl font-bold sm:text-6xl lg:text-7xl sm:max-w-4xl uppercase">
+					Chat With Your <span className="text-emerald-700">Documents</span>
+				</h1>
+				<Icons.line />
 				<p className="mt-5 max-w-prose sm:text-lg text-zinc-600">
 					<span className="font-semibold">Tired of information overload?</span>{" "}
 					Yapster is your one-stop solution for conquering complex topics and
@@ -50,25 +29,16 @@ export default function Home() {
 				<Link
 					href="/dashboard"
 					target="_blank"
-					className={buttonVariants({ size: "lg", className: "mt-5" })}
+					className={buttonVariants({
+						size: "lg",
+						className: "mt-5 bg-emerald-700",
+					})}
 				>
 					Get Started
 				</Link>
 			</MaxWidthWrapper>
 			<div>
 				<div className="relative isolate">
-					<div
-						aria-hidden="true"
-						className="pointer-events-none absolute inset-x-0 -top-40 -z-10 transform-gpu overflow-hidden blur-3xl sm:-top-80"
-					>
-						<div
-							style={{
-								clipPath:
-									"polygon(80.1% 44.1%, 100% 70.6%, 97.5% 26.9%, 85.5% 0.1%, 80.7% 2%, 72.5% 32.5%, 60.2% 62.4%, 52.4% 68.1%, 47.5% 58.3%, 45.2% 34.5%, 27.5% 76.7%, 0.1% 64.9%, 17.9% 100%, 27.6% 76.8%, 76.1% 97.7%, 74.1% 44.1%)",
-							}}
-							className="relative left-[calc(50%-11rem)] aspect-[1155/678] w-[66.125rem] -translate-x-1/2 rotate-[30deg] bg-gradient-to-tr from-blue-500 to-violet-700 opacity-30 sm:left-[calc(50%-30rem)] sm:w-[72.1875rem]"
-						/>
-					</div>
 					<div>
 						<div className="mx-auto max-w-6xl px-6 lg:px-8">
 							<div className="mt-16 flow-root sm:mt-24">
@@ -86,20 +56,10 @@ export default function Home() {
 							</div>
 						</div>
 					</div>
-					<div
-						aria-hidden="true"
-						className="pointer-events-none absolute inset-x-0 -top-40 -z-10 transform-gpu overflow-hidden blur-3xl sm:-top-80"
-					>
-						<div
-							style={{
-								clipPath:
-									"polygon(74.1% 44.1%, 100% 61.6%, 97.5% 26.9%, 85.5% 0.1%, 80.7% 2%, 72.5% 32.5%, 60.2% 62.4%, 52.4% 68.1%, 47.5% 58.3%, 45.2% 34.5%, 27.5% 76.7%, 0.1% 64.9%, 17.9% 100%, 27.6% 76.8%, 76.1% 97.7%, 74.1% 44.1%)",
-							}}
-							className="relative left-[calc(50%-13rem)] aspect-[1155/678] w-[46.125rem] -translate-x-1/2 rotate-[30deg] bg-gradient-to-tr from-[#ff80b5] to-[#9089fc] opacity-30 sm:left-[calc(50%-36rem)] sm:w-[72.1875rem]"
-						/>
-					</div>
 				</div>
 			</div>
+			<WhatIs />
+			<ForWho />
 			<MaxWidthWrapper className="mb-16 mt-16 sm:mt-28">
 				{/* FEATURE SECTION */}
 				<div className="mb-12 px-6 lg:px-8">

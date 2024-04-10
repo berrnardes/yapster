@@ -44,7 +44,13 @@ const Navigation = async () => {
 								>
 									<SignInButton>Login</SignInButton>
 								</Link>
-								<Link href="/" className={buttonVariants({ size: "sm" })}>
+								<Link
+									href="/"
+									className={buttonVariants({
+										size: "sm",
+										className: "bg-emerald-700",
+									})}
+								>
 									<SignUpButton>Get Started</SignUpButton>
 									<ArrowRight className="h-4 w-4 ml-1.5" />
 								</Link>
