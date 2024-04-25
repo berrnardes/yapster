@@ -20,7 +20,7 @@ const UploadButton = () => {
 			<DialogTrigger onClick={() => setIsOpen(true)} asChild>
 				<Button
 					variant="outline"
-					className="shadow-sm text-sm bg-blue-600 text-white"
+					className="shadow-sm text-sm bg-emerald-600 text-white"
 				>
 					<span className="">Upload</span>
 					<Upload className="h-5 w-5 ml-2" />

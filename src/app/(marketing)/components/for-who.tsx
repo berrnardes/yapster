@@ -63,9 +63,7 @@ const ForWho = () => {
 								/>
 							</div>
 							<div className="flex flex-col gap-3 border-t px-5 py-10">
-								<h3 className="text-lg font-bold text-zinc-700">
-									Aprendizes ao longo da vida
-								</h3>
+								<h3 className="text-lg font-bold text-zinc-700">Autoditadas</h3>
 								<p>
 									Explore novas áreas de interesse e satisfaça sua curiosidade
 									intelectual de maneira divertida e interativa.
