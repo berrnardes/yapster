@@ -9,7 +9,7 @@ const Page = () => {
 	const origin = searchParams.get("origin");
 
 	const { isSuccess, isError } = trpc.authCallback.useQuery(undefined, {
-		retry: true,
+		retry: 10,
 		retryDelay: 500,
 	});
 
@@ -17,7 +17,7 @@ const Page = () => {
 	if (isError) redirect("/sign-in");
 
 	return (
-		<div className="w-full mt-24 flex justify-center">
+		<div className="w-full h-full items-center mt-24 flex justify-center">
 			<div className="flex flex-col items-center gap-2">
 				<Loader2 className="w-8 h-8 animate-spin text-zinc-800" />
 				<h3 className="font-semibold text-3xl">Configurando sua conta</h3>

@@ -65,3 +65,8 @@ html,
 .cl-formButtonPrimary {
 	@apply rounded-sm bg-emerald-700 border-0 border-emerald-700 hover:bg-emerald-600;
 }
+
+.cl-userButtonPopoverFooter {
+	visibility: hidden;
+	margin: -28px;
+}

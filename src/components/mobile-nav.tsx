@@ -1,5 +1,6 @@
 "use client";
 
+import { UserButton } from "@clerk/nextjs";
 // import { UserButton } from "@clerk/nextjs";
 import { Menu, X } from "lucide-react";
 import Link from "next/link";
@@ -74,7 +75,7 @@ const MobileNav = ({ isAuth }: { isAuth: boolean }) => {
 							<>
 								<li>
 									<div className="flex items-center w-full font-semibold">
-										{/* <UserButton afterSignOutUrl="/" /> */}
+										<UserButton afterSignOutUrl="/" />
 									</div>
 								</li>
 								<li className="my-3 h-px w-full bg-zinc-200" />

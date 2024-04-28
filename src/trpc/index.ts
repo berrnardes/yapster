@@ -8,6 +8,9 @@ import { z } from "zod";
 import { privateProcedures, publicProcedures, router } from "./trpc";
 
 export const appRouter = router({
+	health: publicProcedures.query(() => {
+		return { sucess: "Ok" };
+	}),
 	authCallback: publicProcedures.query(async () => {
 		const user = await currentUser();
 
