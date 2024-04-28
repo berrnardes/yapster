@@ -2,6 +2,12 @@
 @tailwind components;
 @tailwind utilities;
 
+body,
+html,
+:root {
+	height: 100%;
+}
+
 @layer base {
 	:root {
 		--background: 0 0% 100%;
@@ -47,4 +53,15 @@
 		--input: 240 3.7% 15.9%;
 		--ring: 142.4 71.8% 29.2%;
 	}
+}
+
+/* CUSTOM */
+/* Clerk */
+.cl-internal-180wb59 {
+	visibility: hidden;
+	margin: -20px;
+}
+
+.cl-formButtonPrimary {
+	@apply rounded-sm bg-emerald-700 border-0 border-emerald-700 hover:bg-emerald-600;
 }
