@@ -18,10 +18,10 @@ const Target = () => {
 							<div className="p-5 w-full h-full flex items-center justify-center">
 								<Image
 									src="/student.svg"
-									width={250}
-									height={250}
+									width={0}
+									height={0}
 									alt="Student"
-									className="rounded-t-lg"
+									className="rounded-t-lg h-64 w-64"
 								/>
 							</div>
 							<div className="flex flex-col gap-3 border-t px-5 py-10">
@@ -36,10 +36,10 @@ const Target = () => {
 							<div className="p-5 w-full h-full flex items-center justify-center">
 								<Image
 									src="/professional.svg"
-									width={250}
-									height={250}
+									width={0}
+									height={0}
 									alt="Student"
-									className="rounded-t-lg"
+									className="rounded-t-lg h-64 w-64"
 								/>
 							</div>
 							<div className="flex flex-col gap-3 border-t px-5 py-10">
@@ -56,10 +56,10 @@ const Target = () => {
 							<div className="p-5 w-full h-full flex items-center justify-center">
 								<Image
 									src="/self-taugth.svg"
-									width={250}
-									height={250}
+									width={0}
+									height={0}
 									alt="Student"
-									className="rounded-t-lg"
+									className="rounded-t-lg h-64 w-64"
 								/>
 							</div>
 							<div className="flex flex-col gap-3 border-t px-5 py-10">

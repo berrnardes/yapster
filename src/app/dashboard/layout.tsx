@@ -1,7 +1,12 @@
 import { db } from "@/db";
 import { currentUser } from "@clerk/nextjs/server";
+import { Metadata } from "next";
 import { redirect } from "next/navigation";
 import React from "react";
+
+export const metadata: Metadata = {
+	title: "Yapster - Dashboard",
+};
 
 const Layout = async ({ children }: { children: React.ReactNode }) => {
 	const user = await currentUser();
