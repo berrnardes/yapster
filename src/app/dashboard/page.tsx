@@ -1,19 +1,21 @@
 "use client";
 
 import { trpc } from "@/app/_trpc/client";
+import BoringAvatar from "@/components/icons/boring-avatar";
+import MaxWidthWrapper from "@/components/max-width-wrapper";
+import { Button } from "@/components/ui/button";
 import { format } from "date-fns";
-import { MessageSquare, Plus, Trash } from "lucide-react";
+import { Calendar, MessageSquare, Trash } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import Skeleton from "react-loading-skeleton";
-
-import MaxWidthWrapper from "@/components/max-width-wrapper";
-import { Button } from "@/components/ui/button";
+import "react-loading-skeleton/dist/skeleton.css";
 
 const Dashboard = () => {
 	const utils = trpc.useUtils();
 
 	const { data: files, isLoading } = trpc.getUserFiles.useQuery();
+	console.log(files);
 
 	return (
 		<MaxWidthWrapper className="md:pt-10 pt-5">
@@ -22,6 +24,7 @@ const Dashboard = () => {
 					Meus Documentos
 				</h1>
 				{/* UPLOAD BUTTON */}
+
 				{/* <UploadButton /> */}
 			</div>
 			{files && files.length !== 0 ? (
@@ -41,13 +44,10 @@ const Dashboard = () => {
 									className="flex flex-col gap-2"
 									href={`/dashboard/${file.id}`}
 								>
-									<div className="pt-6 px-6 flex w-full  rounded-lg items-center justify-between space-x-6">
-										<div className="h-10 w-10 flex flex-shrink-0 rounded-full bg-zinc-600 items-center justify-center">
-											{/* <p className="text-white text-3xl -mt-1">
-												{file.name.charAt(0).toUpperCase()}
-											</p> */}
-											{/* ICON */}
-											{/* <Icons.boringavatar /> */}
+									<div className="pt-5 px-5 flex w-full  rounded-lg items-center justify-between space-x-6">
+										<div className="h-14 w-14 flex flex-shrink-0 rounded-md bg-zinc-600 items-center justify-center">
+											{/* TODO: Become dynamic icon when a document is created */}
+											<BoringAvatar.mary_baker />
 										</div>
 										<div className="flex-1 truncate">
 											<div className="flex items-center space-x-3">
@@ -60,8 +60,8 @@ const Dashboard = () => {
 								</Link>
 								<div className="px-6 mt-4 grid grid-cols-3 place-items-center py-2 gap-6 text-xs text-zinc-500">
 									<div className="flex items-center gap-2">
-										<Plus className="h-4 w-4" />
-										{format(new Date(file.createdAt), "MMM yyyy")}
+										<Calendar className="w-4 h-4" />
+										{format(new Date(file.createdAt), "dd/MM/yy")}
 									</div>
 									<div className="flex items-center gap-2">
 										<MessageSquare className="h-4 w-4" />
@@ -77,7 +77,9 @@ const Dashboard = () => {
 						))}
 				</ul>
 			) : isLoading ? (
-				<Skeleton count={3} height={100} className="my-3" />
+				<div>
+					<Skeleton count={3} height={100} className="my-3" />
+				</div>
 			) : (
 				<div className="mt-16 flex flex-col items-center gap-4">
 					<Image

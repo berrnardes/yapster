@@ -47,7 +47,7 @@ const MobileNav = ({ isAuth }: { isAuth: boolean }) => {
 										onClick={() => closeOnCurrent("/sign-up")}
 										className="flex items-center w-full text-blue-600 font-semibold"
 									>
-										Get Started
+										Criar Conta
 									</Link>
 								</li>
 								<li className="my-3 h-[1px] w-full bg-zinc-200" />
@@ -57,7 +57,7 @@ const MobileNav = ({ isAuth }: { isAuth: boolean }) => {
 										onClick={() => closeOnCurrent("/sign-up")}
 										className="flex items-center w-full font-semibold"
 									>
-										Login
+										Entrar
 									</Link>
 								</li>
 								<li className="my-3 h-[1px] w-full bg-zinc-200" />
@@ -67,7 +67,7 @@ const MobileNav = ({ isAuth }: { isAuth: boolean }) => {
 										onClick={() => closeOnCurrent("/sign-up")}
 										className="flex items-center w-full  font-semibold"
 									>
-										Pricing
+										Preços
 									</Link>
 								</li>
 							</>
