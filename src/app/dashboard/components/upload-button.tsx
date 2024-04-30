@@ -2,8 +2,12 @@
 
 import { Upload } from "lucide-react";
 import { useState } from "react";
-import { Button } from "../ui/button";
-import { Dialog, DialogContent, DialogTrigger } from "../ui/dialog";
+import { Button } from "../../../components/ui/button";
+import {
+	Dialog,
+	DialogContent,
+	DialogTrigger,
+} from "../../../components/ui/dialog";
 import UploadDropzone from "./upload-dropzone";
 
 const UploadButton = () => {

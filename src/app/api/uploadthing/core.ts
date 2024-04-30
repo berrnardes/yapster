@@ -58,7 +58,6 @@ const onCompleteUpload = async ({
 
 		const supabaseClient = client;
 
-		console.log(supabaseClient);
 		await SupabaseVectorStore.fromDocuments(document, embeddings, {
 			client: supabaseClient,
 			tableName: "documents",

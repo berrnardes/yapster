@@ -4,19 +4,18 @@ import { trpc } from "@/app/_trpc/client";
 import BoringAvatar from "@/components/icons/boring-avatar";
 import MaxWidthWrapper from "@/components/max-width-wrapper";
 import { Button } from "@/components/ui/button";
-import UploadButton from "@/components/upload/upload-button";
 import { format } from "date-fns";
 import { Calendar, Trash } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
+import UploadButton from "./components/upload-button";
 
 const Dashboard = () => {
 	const utils = trpc.useUtils();
 
 	const { data: files, isLoading } = trpc.getUserFiles.useQuery();
-	console.log(files);
 
 	return (
 		<MaxWidthWrapper className="md:pt-10 pt-5">
@@ -94,7 +93,9 @@ const Dashboard = () => {
 						alt="Empty Folder"
 						priority
 					/>
-					<h3 className="text-2xl font-semibold">Parece Vazio Por aqui</h3>
+					<h3 className="text-2xl text-zinc-700 font-semibold">
+						Parece Vazio Por aqui
+					</h3>
 					<p className="text-zinc-700 mb-5">
 						Vamos começar carregando seu primeiro arquivo
 					</p>

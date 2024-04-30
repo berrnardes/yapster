@@ -4,8 +4,8 @@ import { File, Loader2, UploadCloud } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import Dropzone from "react-dropzone";
-import { Progress } from "../ui/progress";
-import { useToast } from "../ui/use-toast";
+import { Progress } from "../../../components/ui/progress";
+import { useToast } from "../../../components/ui/use-toast";
 
 const UploadDropzone = () => {
 	const router = useRouter();
@@ -14,9 +14,7 @@ const UploadDropzone = () => {
 
 	const { toast } = useToast();
 
-	console.log("BEFORE UPLOADTHING");
 	const { startUpload } = useUploadThing("freePlanUploader");
-	console.log("BEFORE UPLOADTHING");
 
 	const { mutate: startPolling } = trpc.getFile.useMutation({
 		onSuccess: (file) => {

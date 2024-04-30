@@ -17,7 +17,7 @@ const Hero = () => {
 				<h1 className="text-zinc-800 max-w-sm sm:mt-5 text-5xl font-bold sm:text-6xl lg:text-7xl sm:max-w-4xl uppercase">
 					Converse Com Seus <span className="text-primary">Documentos</span>
 				</h1>
-				<LineIcon className="w-60 sm:w-96 lg:w-[450px]" />
+				<LineIcon className="w-80 sm:w-96 lg:w-[500px]" />
 				<p className="mt-5 max-w-prose sm:text-lg text-zinc-600">
 					<span className="font-semibold">
 						Sofrendo com excesso de informações?
