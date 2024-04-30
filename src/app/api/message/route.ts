@@ -22,8 +22,6 @@ type Tmsg = {
 export const POST = async (req: NextRequest) => {
 	const body = await req.json();
 
-	console.log(body);
-
 	// Check if the request was maded by a signed user
 	const user = await currentUser();
 	if (!user?.id) {
@@ -94,7 +92,7 @@ export const POST = async (req: NextRequest) => {
 				// Instructions for the model to know to behave
 				role: "system",
 				content:
-					"Use os seguintes trechos de contexto (ou conversa anterior, se necessário) para responder à pergunta do usuário em formato markdown.\n Use seu conhecimento sobre o conteúdo do documento para resumir o conteúdo em markdown se o usúario pedir",
+					"Use os seguintes trechos de contexto (ou conversa anterior, se necessário) para responder à pergunta do usuário em formato markdown.",
 			},
 			{
 				role: "user",
