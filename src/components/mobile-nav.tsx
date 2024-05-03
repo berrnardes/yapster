@@ -1,13 +1,18 @@
 "use client";
 
 import { UserButton } from "@clerk/nextjs";
-// import { UserButton } from "@clerk/nextjs";
 import { Menu, X } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 
-const MobileNav = ({ isAuth }: { isAuth: boolean }) => {
+const MobileNav = ({
+	isAuth,
+	isSubscribed,
+}: {
+	isAuth: boolean;
+	isSubscribed: boolean;
+}) => {
 	const [isOpen, setOpen] = useState<boolean>(true);
 
 	const pathname = usePathname();
@@ -45,7 +50,7 @@ const MobileNav = ({ isAuth }: { isAuth: boolean }) => {
 									<Link
 										href="/sign-up"
 										onClick={() => closeOnCurrent("/sign-up")}
-										className="flex items-center w-full text-blue-600 font-semibold"
+										className="flex items-center w-full text-emerald-700 font-semibold"
 									>
 										Criar Conta
 									</Link>
@@ -54,7 +59,7 @@ const MobileNav = ({ isAuth }: { isAuth: boolean }) => {
 								<li>
 									<Link
 										href="/sign-in"
-										onClick={() => closeOnCurrent("/sign-up")}
+										onClick={() => closeOnCurrent("/sign-in")}
 										className="flex items-center w-full font-semibold"
 									>
 										Entrar
@@ -63,8 +68,8 @@ const MobileNav = ({ isAuth }: { isAuth: boolean }) => {
 								<li className="my-3 h-[1px] w-full bg-zinc-200" />
 								<li>
 									<Link
-										href="/sign-in"
-										onClick={() => closeOnCurrent("/sign-up")}
+										href="/pricing"
+										onClick={() => closeOnCurrent("/pricing")}
 										className="flex items-center w-full  font-semibold"
 									>
 										Preços
@@ -81,8 +86,18 @@ const MobileNav = ({ isAuth }: { isAuth: boolean }) => {
 								<li className="my-3 h-px w-full bg-zinc-200" />
 								<li>
 									<Link
+										href="/dashboard/billing"
+										onClick={() => closeOnCurrent("/dashboard/billing")}
+										className="flex items-center w-full font-semibold"
+									>
+										{isSubscribed ? <p>Seu Plano</p> : <p>💎 Upgrade</p>}
+									</Link>
+								</li>
+								<li className="my-3 h-px w-full bg-zinc-200" />
+								<li>
+									<Link
 										href="/dashboard"
-										onClick={() => closeOnCurrent("/sign-up")}
+										onClick={() => closeOnCurrent("/dashboard")}
 										className="flex items-center w-full font-semibold"
 									>
 										Dashboard

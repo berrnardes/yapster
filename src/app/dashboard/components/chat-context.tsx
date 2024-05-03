@@ -121,7 +121,11 @@ export const ChatContextProvider = ({ children, fileId }: Props) => {
 				done = doneReading;
 				const chunkValue = decoder.decode(value);
 
-				accResponse += chunkValue;
+				// accResponse += chunkValue;
+				const matches = chunkValue.match(/(?<=")(.*?)(?=")/g);
+				if (matches) {
+					accResponse += matches.join("");
+				}
 
 				utils.getFileMessages.setInfiniteData(
 					{ fileId, limit: INFINITE_QUERY_LIMIT },

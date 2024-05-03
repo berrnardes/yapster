@@ -14,7 +14,7 @@ const Hero = () => {
 					</p>
 				</div>
 
-				<h1 className="text-zinc-800 max-w-sm sm:mt-5 text-5xl font-bold sm:text-6xl lg:text-7xl sm:max-w-4xl uppercase">
+				<h1 className="text-zinc-800 max-w-sm text-5xl font-bold sm:text-6xl lg:text-7xl sm:max-w-4xl uppercase">
 					Converse Com Seus <span className="text-primary">Documentos</span>
 				</h1>
 				<LineIcon className="w-80 sm:w-96 lg:w-[500px]" />
@@ -43,7 +43,7 @@ const Hero = () => {
 							<div className="mt-16 mb-20 flow-root sm:mt-24">
 								<div className="-m-2 rounded-md bg-gray-900/5 p-2 ring-1 ring-inset ring-gray-900/10 lg:-m-4 lg:rounded-xl lg:p-3">
 									<Image
-										src="/dashboard-preview.jpg"
+										src="/dashboard.jpg"
 										alt="product preview"
 										width={1364}
 										height={866}

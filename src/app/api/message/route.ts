@@ -2,11 +2,11 @@ import { db } from "@/db";
 import { openai } from "@/lib/openai";
 import { sendMessageValidator } from "@/lib/validators/send-message-validator";
 import { currentUser } from "@clerk/nextjs/server";
-import { SupabaseVectorStore } from "@langchain/community/vectorstores/supabase";
 import { OpenAIEmbeddings } from "@langchain/openai";
 import { NextRequest } from "next/server";
 
-import { client } from "@/lib/supabase";
+import { PineconeStore } from "@langchain/pinecone";
+import { Pinecone } from "@pinecone-database/pinecone";
 import { OpenAIStream, StreamingTextResponse } from "ai";
 
 type Tmsg = {
@@ -57,14 +57,27 @@ export const POST = async (req: NextRequest) => {
 		openAIApiKey: process.env.OPENAI_API_KEY,
 	});
 
-	const supabaseClient = client;
-	const vectorStore = await SupabaseVectorStore.fromExistingIndex(embeddings, {
-		client: supabaseClient,
-		tableName: "documents",
-		queryName: "match_documents",
+	const pinecone = new Pinecone({
+		apiKey: process.env.PINECONE_API_KEY as string,
+	});
+
+	const index = pinecone.Index("yapster");
+
+	const vectorStore = await PineconeStore.fromExistingIndex(embeddings, {
+		pineconeIndex: index,
+		namespace: file.id,
 	});
 
 	const results = await vectorStore.similaritySearch(message, 4);
+
+	// const supabaseClient = client;
+	// const vectorStore = await SupabaseVectorStore.fromExistingIndex(embeddings, {
+	// 	client: supabaseClient,
+	// 	tableName: "documents",
+	// 	queryName: "match_documents",
+	// });
+
+	// const results = await vectorStore.similaritySearch(message, 4);
 
 	// Search for messages related to the current file
 	const prevMessages = await db.message.findMany({

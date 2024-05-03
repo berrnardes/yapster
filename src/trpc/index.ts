@@ -1,8 +1,13 @@
 import { INFINITE_QUERY_LIMIT } from "@/config/infinite-query";
 // import { PLANS } from "@/config/stripe";
 // import { getUserSubscriptionPlan, stripe } from "@/lib/stripe";
+import { utapi } from "@/app/api/uploadthing/core";
+import { PLANS } from "@/config/stripe";
 import { db } from "@/db";
+import { getUserSubscriptionPlan, stripe } from "@/lib/stripe";
+import { absoluteUrl } from "@/lib/utils";
 import { currentUser } from "@clerk/nextjs/server";
+import { Pinecone } from "@pinecone-database/pinecone";
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 import { privateProcedures, publicProcedures, router } from "./trpc";
@@ -125,51 +130,82 @@ export const appRouter = router({
 
 			return { status: file.uploadStatus };
 		}),
-	// createStripeSession: privateProcedures.mutation(async ({ ctx }) => {
-	// 	const { userId } = ctx;
+	createStripeSession: privateProcedures.mutation(async ({ ctx }) => {
+		const { userId } = ctx;
 
-	// 	const billingUrl = absoluteUrl("/dashboard/billing");
+		const billingUrl = absoluteUrl("/dashboard/billing");
 
-	// 	if (!userId) throw new TRPCError({ code: "UNAUTHORIZED" });
+		if (!userId) throw new TRPCError({ code: "UNAUTHORIZED" });
 
-	// 	const dbUser = await db.user.findFirst({
-	// 		where: {
-	// 			id: userId,
-	// 		},
-	// 	});
+		const dbUser = await db.user.findFirst({
+			where: {
+				id: userId,
+			},
+		});
 
-	// 	if (!dbUser) throw new TRPCError({ code: "UNAUTHORIZED" });
+		if (!dbUser) throw new TRPCError({ code: "UNAUTHORIZED" });
 
-	// 	const subscriptionPlan = await getUserSubscriptionPlan();
+		const subscriptionPlan = await getUserSubscriptionPlan();
 
-	// 	if (subscriptionPlan.isSubscribed && dbUser.stripeCustomerId) {
-	// 		const stripeSession = await stripe.billingPortal.sessions.create({
-	// 			customer: dbUser.stripeCustomerId,
-	// 			return_url: billingUrl,
-	// 		});
+		if (subscriptionPlan.isSubscribed && dbUser.stripeCustomerId) {
+			const stripeSession = await stripe.billingPortal.sessions.create({
+				customer: dbUser.stripeCustomerId,
+				return_url: billingUrl,
+			});
 
-	// 		return { url: stripeSession.url };
-	// 	}
+			return { url: stripeSession.url };
+		}
 
-	// 	const stripeSession = await stripe.checkout.sessions.create({
-	// 		success_url: billingUrl,
-	// 		cancel_url: billingUrl,
-	// 		payment_method_types: ["card", "boleto"],
-	// 		mode: "subscription",
-	// 		billing_address_collection: "auto",
-	// 		line_items: [
-	// 			{
-	// 				price: PLANS.find((plan) => plan.name === "Pro")?.price.priceIds.test,
-	// 				quantity: 1,
-	// 			},
-	// 		],
-	// 		metadata: {
-	// 			userId: userId,
-	// 		},
-	// 	});
+		const stripeSession = await stripe.checkout.sessions.create({
+			success_url: billingUrl,
+			cancel_url: billingUrl,
+			payment_method_types: ["card", "boleto"],
+			mode: "subscription",
+			billing_address_collection: "auto",
+			line_items: [
+				{
+					price: PLANS.find((plan) => plan.name === "Pro")?.price.priceIds.test,
+					quantity: 1,
+				},
+			],
+			metadata: {
+				userId: userId,
+			},
+		});
 
-	// 	return { url: stripeSession.url };
-	// }),
+		return { url: stripeSession.url };
+	}),
+	deleteFile: privateProcedures
+		.input(z.object({ id: z.string() }))
+		.mutation(async ({ ctx, input }) => {
+			const { userId } = ctx;
+
+			const file = await db.file.findFirst({
+				where: {
+					id: input.id,
+					userId,
+				},
+			});
+
+			if (!file) throw new TRPCError({ code: "NOT_FOUND" });
+
+			const pc = new Pinecone({
+				apiKey: process.env.PINECONE_API_KEY as string,
+			});
+
+			const index = pc.Index("yapster");
+
+			await index.namespace(input.id).deleteAll();
+			await db.file.delete({
+				where: {
+					id: input.id,
+				},
+			});
+
+			await utapi.deleteFiles(file.key);
+
+			return file;
+		}),
 });
 
 export type AppRouter = typeof appRouter;

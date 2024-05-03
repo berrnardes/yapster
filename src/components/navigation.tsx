@@ -1,5 +1,6 @@
 // import { SignInButton, SignUpButton, UserButton, auth } from "@clerk/nextjs";
 // import { getUserSubscriptionPlan } from "@/lib/stripe";
+import { getUserSubscriptionPlan } from "@/lib/stripe";
 import { SignInButton, SignUpButton, UserButton } from "@clerk/nextjs";
 import { auth } from "@clerk/nextjs/server";
 import Image from "next/image";
@@ -10,7 +11,7 @@ import { buttonVariants } from "./ui/button";
 
 const Navigation = async () => {
 	const { userId } = auth();
-	//   const subscriptionPlan = await getUserSubscriptionPlan();
+	const subscriptionPlan = await getUserSubscriptionPlan();
 
 	return (
 		<div className="min-h-14 sticky inset-x-2 w-full bg-white/75 border-zinc-200 backdrop-blur-lg transition-all border-b top-0 z-30">
@@ -28,8 +29,10 @@ const Navigation = async () => {
 							/>
 						</Link>
 					</h1>
-					{/* TODO MOBILE NAV */}
-					<MobileNav isAuth={true} />
+					<MobileNav
+						isAuth={!!userId}
+						isSubscribed={subscriptionPlan.isSubscribed}
+					/>
 					<div className="hidden sm:flex justify-center items-center space-x-4">
 						{!userId ? (
 							<>
@@ -61,7 +64,11 @@ const Navigation = async () => {
 									href="/dashboard/billing"
 									className={buttonVariants({ size: "sm", variant: "ghost" })}
 								>
-									Preços
+									{subscriptionPlan.isSubscribed ? (
+										<p>Seu Plano</p>
+									) : (
+										<p>💎 Upgrade</p>
+									)}
 								</Link>
 
 								<Link

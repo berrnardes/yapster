@@ -7,14 +7,16 @@ import Dropzone from "react-dropzone";
 import { Progress } from "../../../components/ui/progress";
 import { useToast } from "../../../components/ui/use-toast";
 
-const UploadDropzone = () => {
+const UploadDropzone = ({ isSubscribed }: { isSubscribed: boolean }) => {
 	const router = useRouter();
 	const [isUploading, setIsUploading] = useState<boolean>(false);
 	const [uploadProgress, setUploadProgress] = useState<number>(0);
 
 	const { toast } = useToast();
 
-	const { startUpload } = useUploadThing("freePlanUploader");
+	const { startUpload } = useUploadThing(
+		isSubscribed ? "proPlanUploader" : "freePlanUploader"
+	);
 
 	const { mutate: startPolling } = trpc.getFile.useMutation({
 		onSuccess: (file) => {
@@ -43,6 +45,7 @@ const UploadDropzone = () => {
 	return (
 		<Dropzone
 			multiple={false}
+			accept={{ "application/pdf": [".pdf"] }}
 			onDrop={async (acceptedFiles) => {
 				setIsUploading(true);
 
@@ -50,11 +53,10 @@ const UploadDropzone = () => {
 
 				// Handle the file uploading
 				const res = await startUpload(acceptedFiles);
-
 				if (!res) {
 					return toast({
-						title: "Algo deu errado",
-						description: "Por favor tente de novo!!!",
+						title: "Tamanho de documento excedido",
+						description: "Por favor, tente com um documento menor!",
 						variant: "destructive",
 					});
 				}
@@ -93,7 +95,9 @@ const UploadDropzone = () => {
 									<span className="font-semibold">Clique </span>
 									ou arrasta e solta
 								</p>
-								<p className="text-sm text-zinc-600">PDF até 4MB</p>
+								<p className="text-sm text-zinc-600">
+									PDF até {isSubscribed ? "16MB" : "2MB"}
+								</p>
 							</div>
 							{acceptedFiles && acceptedFiles[0] ? (
 								<div className="max-w-xs bg-white flex items-center rounded-md overflow-hidden outline outline-[1px] outline-zinc-200 divide-x divide-zinc-200">

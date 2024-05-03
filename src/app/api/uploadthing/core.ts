@@ -1,10 +1,13 @@
+import { PLANS } from "@/config/stripe";
 import { db } from "@/db";
-import { client } from "@/lib/supabase";
+import { getUserSubscriptionPlan } from "@/lib/stripe";
 import { currentUser } from "@clerk/nextjs/server";
-import { SupabaseVectorStore } from "@langchain/community/vectorstores/supabase";
 import { OpenAIEmbeddings } from "@langchain/openai";
+import { PineconeStore } from "@langchain/pinecone";
+import { Pinecone } from "@pinecone-database/pinecone";
 import { PDFLoader } from "langchain/document_loaders/fs/pdf";
 import { FileRouter, createUploadthing } from "uploadthing/next";
+import { UTApi } from "uploadthing/server";
 
 const f = createUploadthing();
 
@@ -13,7 +16,9 @@ const middleware = async () => {
 
 	if (!user || !user.id) throw new Error("UNAUTHORIZED");
 
-	return { userId: user.id };
+	const subscriptionPlan = await getUserSubscriptionPlan();
+
+	return { subscriptionPlan, userId: user.id };
 };
 
 const onCompleteUpload = async ({
@@ -54,14 +59,41 @@ const onCompleteUpload = async ({
 
 		const document = await new PDFLoader(blob).load();
 
+		const pageAmnt = document.length;
+
+		//BUG: DELETE CONSOLE
+		console.log(pageAmnt);
+
+		const { subscriptionPlan } = metadata;
+
+		const { isSubscribed } = subscriptionPlan;
+
+		const isProExceeded =
+			pageAmnt > PLANS.find((plan) => plan.name === "Pro")!.pagesPerPdf;
+
+		const isFreeExceeded =
+			pageAmnt > PLANS.find((plan) => plan.name === "Free")!.pagesPerPdf;
+
+		if ((isSubscribed && isProExceeded) || (!isSubscribed && isFreeExceeded)) {
+			await db.file.update({
+				data: {
+					uploadStatus: "FAILED",
+				},
+				where: {
+					id: createdFile.id,
+				},
+			});
+		}
+
 		const embeddings = new OpenAIEmbeddings();
 
-		const supabaseClient = client;
+		const pc = new Pinecone({ apiKey: process.env.PINECONE_API_KEY as string });
 
-		await SupabaseVectorStore.fromDocuments(document, embeddings, {
-			client: supabaseClient,
-			tableName: "documents",
-			queryName: "match_documents",
+		const index = pc.Index("yapster");
+
+		await PineconeStore.fromDocuments(document, embeddings, {
+			pineconeIndex: index,
+			namespace: createdFile.id,
 		});
 
 		await db.file.update({
@@ -86,9 +118,14 @@ const onCompleteUpload = async ({
 };
 
 export const ourFileRouter = {
-	freePlanUploader: f({ pdf: { maxFileSize: "32MB" } })
+	//BUG: change pro plan size
+	freePlanUploader: f({ pdf: { maxFileSize: "2MB" } })
+		.middleware(middleware)
+		.onUploadComplete(onCompleteUpload),
+	proPlanUploader: f({ pdf: { maxFileSize: "2MB" } })
 		.middleware(middleware)
 		.onUploadComplete(onCompleteUpload),
 } satisfies FileRouter;
 
 export type OurFileRouter = typeof ourFileRouter;
+export const utapi = new UTApi();

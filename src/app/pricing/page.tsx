@@ -7,6 +7,7 @@ import {
 	TooltipProvider,
 	TooltipTrigger,
 } from "@/components/ui/tooltip";
+import UpgradeButton from "@/components/upgrade-button";
 // import UpgradeButton from "@/components/upgrade-button";
 import { PLANS } from "@/config/stripe";
 import { cn } from "@/lib/utils";
@@ -173,7 +174,7 @@ const PricingPage = () => {
 									</ul>
 									<div className="border-t border-zinc-200" />
 									<div className="p-5">
-										{plan === "Free" ? (
+										{plan === "Gratuito" ? (
 											<Link
 												href={userId ? "/dashboard" : "/sign-in"}
 												className={buttonVariants({
@@ -181,14 +182,13 @@ const PricingPage = () => {
 													variant: "secondary",
 												})}
 											>
-												{userId ? "Upgrade now" : "Criar Conta"}
+												{userId ? "Começar a usar" : "Criar Conta"}
 												<ArrowRight className="h-5 w-5 ml-1.5" />
 											</Link>
 										) : userId ? (
 											// TODO: Upgrade Button
-											<p>Upgrade Button</p>
+											<UpgradeButton />
 										) : (
-											// <UpgradeButton />
 											<Link
 												href="/sign-in"
 												className={buttonVariants({
