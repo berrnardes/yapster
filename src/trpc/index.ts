@@ -7,7 +7,6 @@ import { db } from "@/db";
 import { getUserSubscriptionPlan, stripe } from "@/lib/stripe";
 import { absoluteUrl } from "@/lib/utils";
 import { currentUser } from "@clerk/nextjs/server";
-import { Pinecone } from "@pinecone-database/pinecone";
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 import { privateProcedures, publicProcedures, router } from "./trpc";
@@ -189,13 +188,13 @@ export const appRouter = router({
 
 			if (!file) throw new TRPCError({ code: "NOT_FOUND" });
 
-			const pc = new Pinecone({
-				apiKey: process.env.PINECONE_API_KEY as string,
-			});
+			// const pc = new Pinecone({
+			// 	apiKey: process.env.PINECONE_API_KEY as string,
+			// });
 
-			const index = pc.Index("yapster");
+			// const index = pc.Index("yapster");
 
-			await index.namespace(input.id).deleteAll();
+			// await index.namespace(input.id).deleteAll();
 			await db.file.delete({
 				where: {
 					id: input.id,
@@ -204,7 +203,7 @@ export const appRouter = router({
 
 			await utapi.deleteFiles(file.key);
 
-			return file;
+			return { sucess: "ok" };
 		}),
 });
 

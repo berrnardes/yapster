@@ -61,9 +61,6 @@ const onCompleteUpload = async ({
 
 		const pageAmnt = document.length;
 
-		//BUG: DELETE CONSOLE
-		console.log(pageAmnt);
-
 		const { subscriptionPlan } = metadata;
 
 		const { isSubscribed } = subscriptionPlan;

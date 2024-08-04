@@ -90,7 +90,6 @@ const Dashboard = ({ userSubscription }: dashboardProps) => {
 										mocked
 									</div> */}
 
-									{/* TODO DELETE FUNCTION */}
 									<Button
 										className="w-full sm:w-1/2"
 										variant="destructive"
